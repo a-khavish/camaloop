@@ -1,0 +1,13 @@
+PyQt5>=5.15
+# Version 5 removed the face finder every face effect needs, so the
+# upper bound is deliberate rather than caution.
+opencv-python>=4.5,<5
+numpy>=1.20
+
+# Optional extras.
+# Pillow lets the text overlay draw accented and non-Latin names properly;
+# without it they are shown without their accents.
+# Pillow>=9.0
+#
+# mediapipe powers "Background without a green screen".
+# mediapipe>=0.10

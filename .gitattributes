@@ -1,0 +1,12 @@
+# OpenCV's detection data is third-party and enormous next to the code.
+# Without this GitHub reports the project as mostly XML.
+camaloop/data/*.xml linguist-vendored
+
+# Screenshots and the demo recording are documentation, not source.
+docs/** linguist-documentation
+
+# Keep line endings sane for anyone on a non-Linux machine browsing it.
+* text=auto eol=lf
+*.png binary
+*.mp4 binary
+*.xml text eol=lf

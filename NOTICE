@@ -1,0 +1,65 @@
+Camaloop
+Copyright (c) 2026 Khavish Auckaloo.
+
+This program is free software: you may redistribute it and/or modify it under
+the terms of version 3 of the GNU General Public License as published by the
+Free Software Foundation. It is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY - without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the LICENSE file for the full terms.
+Questions: https://github.com/a-khavish/camaloop/issues
+
+Why GPLv3: Camaloop is built on PyQt5, which Riverbank Computing licenses
+under the GPL or a commercial licence. Distributing a PyQt5 application under
+anything more permissive would sit badly with that, so the whole of Camaloop
+is GPLv3.
+
+================================================================================
+Third-party content
+================================================================================
+
+Bundled in this repository
+--------------------------
+
+camaloop/data/haarcascade_frontalface_default.xml
+camaloop/data/haarcascade_eye.xml
+
+    OpenCV's face and eye detectors, copied unchanged from the OpenCV
+    distribution. Copyright (c) 2000, Intel Corporation, all rights reserved;
+    third-party copyrights are the property of their respective owners.
+    Released under the Intel License Agreement for the Open Source Computer
+    Vision Library, a BSD-style licence that permits redistribution provided
+    the notice is retained. Each file carries that notice verbatim in its own
+    header, and neither has been edited.
+
+    They travel with the app because they are not always installed alongside
+    OpenCV itself: on Debian and Ubuntu the Python bindings come from
+    python3-opencv while the detection data sits in a separate opencv-data
+    package that nothing depends on. See camaloop/data/README.txt.
+
+Required at runtime, not distributed here
+-----------------------------------------
+
+    PyQt5            GPL v3, or a commercial licence from Riverbank Computing
+    OpenCV           Apache License 2.0
+    NumPy            BSD 3-Clause
+
+Optional at runtime, not distributed here
+-----------------------------------------
+
+    mediapipe        Apache License 2.0   background replacement with no
+                                          green screen
+    Pillow           HPND                 accented and non-Latin text in the
+                                          text overlay
+
+Called as external programs where present
+-----------------------------------------
+
+    v4l2loopback     the virtual camera kernel module
+    ffmpeg           screen capture on X11
+    grim             Wayland screenshot fallback
+
+    Camaloop runs these as separate programs over their own command-line
+    interfaces. None of them is linked into Camaloop or distributed with it,
+    so none of them carries a notice obligation here; each stays under its
+    own licence wherever it was installed from.

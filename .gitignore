@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Packaging output
+*.deb
+*.zip
+packaging/build/
+packaging/*.tar.gz
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# Things the app writes at runtime
+*.log
+captures/
+
+# Diagnostics output
+smoketest/

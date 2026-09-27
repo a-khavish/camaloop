@@ -1,0 +1,113 @@
+name: checks
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: System libraries Qt and OpenCV need
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libgl1 libglib2.0-0 libegl1 libxkbcommon-x11-0 libdbus-1-3 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
+            xvfb ffmpeg
+
+      - name: Python packages
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install PyQt5 "opencv-python-headless<5" numpy Pillow
+
+      - name: Every effect over a frame
+        run: python tools/selftest.py
+
+      # On a real virtual display, not Qt's offscreen platform: the
+      # offscreen one pretends the screen is 800x600, and the layout checks
+      # need room to try the sizes people actually use.
+      - name: The whole test suite
+        run: |
+          xvfb-run -a --server-args="-screen 0 2560x1440x24" \
+            env QT_QPA_PLATFORM= python -m unittest discover -s tests -v
+
+      - name: The same suite with no display at all
+        run: python -m unittest discover -s tests
+
+      - name: The interface starts, draws, and fits every screen size
+        run: |
+          xvfb-run -a --server-args="-screen 0 1920x1080x24" \
+            env QT_QPA_PLATFORM= python tools/smoketest.py
+
+  # OpenCV 5 removed the cascade classifier every face effect is built on.
+  # Camaloop requires version 4, but a machine can still end up on 5, and
+  # when it does the face effects must say so rather than find no faces in
+  # silence. This job is what keeps that true.
+  opencv5:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: System libraries Qt and OpenCV need
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libgl1 libglib2.0-0 libegl1 libxkbcommon-x11-0 libdbus-1-3 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
+            xvfb ffmpeg
+
+      - name: Python packages, deliberately on OpenCV 5
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install PyQt5 "opencv-python-headless>=5" numpy Pillow
+          python -c "import cv2; print(cv2.__version__)"
+
+      - name: The suite skips the face tests rather than failing them
+        run: |
+          xvfb-run -a --server-args="-screen 0 2560x1440x24" \
+            env QT_QPA_PLATFORM= python -m unittest discover -s tests
+
+      - name: Every face effect refuses out loud
+        run: |
+          python - <<'PY'
+          from camaloop.core.faces import cascades_supported, face_detection_ready
+          assert not cascades_supported(), "expected an OpenCV without cascades"
+          usable, why = face_detection_ready()
+          assert not usable, "face detection claimed to work without a classifier"
+          assert why.strip(), "refused without saying why"
+          print(why)
+          PY
+
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell scripts parse
+        run: |
+          for script in setup.sh install.sh packaging/build-deb.sh; do
+            bash -n "$script" && echo "ok   $script"
+          done
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y shellcheck
+          shellcheck -S warning setup.sh install.sh packaging/build-deb.sh || true

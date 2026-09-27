@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Camaloop</title>
+  <desc>A loop of light returning to an aperture.</desc>
+  <defs>
+    <linearGradient id="loop" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#F2BE66"/>
+      <stop offset="1" stop-color="#D4861F"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="#161A21"/>
+  <rect x="2.75" y="2.75" width="58.5" height="58.5" rx="14.25" fill="none"
+        stroke="#2A3039" stroke-width="1.5"/>
+
+  <!-- the loop: the picture goes out and comes back as another camera -->
+  <path d="M32.0 13.0 A19.0 19.0 0 1 1 15.5 22.5"
+        fill="none" stroke="url(#loop)" stroke-width="4.6" stroke-linecap="round"/>
+  <path d="M17.5 19.2 L18.3 27.7 L9.6 22.7 Z" fill="#F2BE66"/>
+
+  <!-- aperture -->
+  <circle cx="32" cy="32" r="11.5" fill="#0E1116"/>
+  <circle cx="32" cy="32" r="11.5" fill="none" stroke="#3A424E" stroke-width="1.6"/>
+  <circle cx="32" cy="32" r="4.8" fill="#E4E8EF"/>
+  <circle cx="34.2" cy="29.8" r="1.6" fill="#161A21" opacity="0.5"/>
+</svg>

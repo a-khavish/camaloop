@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "camaloop"
+version = "1.0.0"
+description = "One camera in, any camera out - live camera effects and virtual cameras for Linux"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "GPL-3.0-only" }
+keywords = ["webcam", "camera", "v4l2", "v4l2loopback", "virtual camera", "video"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Video :: Capture",
+]
+dependencies = [
+    "PyQt5>=5.15",
+    "opencv-python>=4.5,<5",
+    "numpy>=1.20",
+]
+
+[project.urls]
+Homepage = "https://github.com/a-khavish/camaloop"
+Issues = "https://github.com/a-khavish/camaloop/issues"
+Changelog = "https://github.com/a-khavish/camaloop/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+# Background replacement without a green screen.
+segmentation = ["mediapipe>=0.10"]
+# Accented and non-Latin text in the overlay.
+text = ["Pillow>=9.0"]
+
+[project.scripts]
+camaloop = "camaloop.app:main"
+
+[project.gui-scripts]
+camaloop-gui = "camaloop.app:main"
+
+[tool.setuptools.package-data]
+# OpenCV's face and eye detectors. They travel with the app because they are
+# not always installed alongside OpenCV itself.
+camaloop = ["data/*.xml", "data/*.txt"]
+
+[tool.setuptools.packages.find]
+include = ["camaloop*"]
+
+[tool.setuptools.data-files]
+"share/applications" = ["packaging/camaloop.desktop"]
+"share/icons/hicolor/scalable/apps" = ["packaging/camaloop.svg"]

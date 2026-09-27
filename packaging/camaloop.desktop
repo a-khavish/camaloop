@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Camaloop
+GenericName=Virtual camera studio
+Comment=One camera in, any camera out - live effects and virtual cameras
+Exec=camaloop
+TryExec=camaloop
+Icon=camaloop
+Terminal=false
+StartupNotify=true
+StartupWMClass=camaloop
+Categories=AudioVideo;Video;Recorder;Utility;
+Keywords=webcam;camera;virtual;effects;filters;v4l2loopback;background;greenscreen;glitch;
